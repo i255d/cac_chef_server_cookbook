@@ -13,12 +13,3 @@ end
 #     command "hostnamectl set-hostname #{node['chef_server']['chef_server_host']}"
 #     action :run
 # end
-
-
-
-
-
-
-
-
-
