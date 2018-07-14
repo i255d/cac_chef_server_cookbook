@@ -1,4 +1,9 @@
-﻿$hostname = hostname
+﻿#!/usr/bin/pwsh
+#Set-Content $scriptPath ((Get-Content $scriptPath -raw) -replace "\r") -Encoding utf8
+
+
+
+$hostname = hostname
 if($hostname -match 'dev'){
     $azureEnv = 'dev'
     $envIPSub = '10.14.40.'
