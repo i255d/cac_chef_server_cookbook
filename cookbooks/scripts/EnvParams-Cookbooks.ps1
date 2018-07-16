@@ -1,8 +1,6 @@
 ﻿#!/usr/bin/pwsh
 #Set-Content $scriptPath ((Get-Content $scriptPath -raw) -replace "\r") -Encoding utf8
 
-
-
 $hostname = hostname
 if($hostname -match 'dev'){
     $azureEnv = 'dev'
@@ -60,6 +58,8 @@ $automate6 = $automate5.Replace('__automateFQDN__', $autodevFqdn)
 $chefOut = $automate6.Replace('__chefFQDN__', $chefdevFqdn)
 
 
-$chefOut > '/tmp/cookbooks/chef_server/attributes/default.rb'
+$chefOut 
+#> '/tmp/cookbooks/chef_server/attributes/default.rb'
 
-$automateOut > '/tmp/cookbooks/chef_automate/attributes/default.rb'
+$automateOut 
+#> '/tmp/cookbooks/chef_automate/attributes/default.rb'
