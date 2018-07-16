@@ -1,10 +1,10 @@
 
-remote_file '/tmp/automate-1.8.3-1.el7.x86_64.rpm' do
-    source 'https://packages.chef.io/files/stable/automate/1.8.3/el/7/automate-1.8.3-1.el7.x86_64.rpm'
+remote_file '/tmp/automate-1.8.85-1.el7.x86_64.rpm' do
+    source 'https://packages.chef.io/files/stable/automate/1.8.85/el/7/automate-1.8.85-1.el7.x86_64.rpm'
 end
 
 package 'install chef automate' do
-    source '/tmp/automate-1.8.3-1.el7.x86_64.rpm'
+    source '/tmp/automate-1.8.85-1.el7.x86_64.rpm'
     action :install
 end
 
