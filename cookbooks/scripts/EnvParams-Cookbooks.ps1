@@ -58,8 +58,6 @@ $automate6 = $automate5.Replace('__automateFQDN__', $autodevFqdn)
 $chefOut = $automate6.Replace('__chefFQDN__', $chefdevFqdn)
 
 
-$chefOut 
-#> '/tmp/cookbooks/chef_server/attributes/default.rb'
+$chefOut > '/tmp/cookbooks/chef_server/attributes/default.rb'
 
-$automateOut 
-#> '/tmp/cookbooks/chef_automate/attributes/default.rb'
+$automateOut > '/tmp/cookbooks/chef_automate/attributes/default.rb'
