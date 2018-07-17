@@ -38,8 +38,8 @@ end
 bash 'configure chef automate' do
     cwd '/tmp'
     code <<-EOH
-        automate-ctl setup --license /home/abl/delivery.license --key /home/abl/acuityautomate-validator.pem --server-url https://#{node['chef_automate']['chef_server_fqdn']}/organizations/acuityautomate --fqdn #{node['chef_automate']['chef_automate_fqdn']} --enterprise acuitybrands_mate --configure --no-build-node > setup.output
-        automate-ctl reconfigure
+        sudo automate-ctl setup --license /home/abl/delivery.license --key /home/abl/acuityautomate-validator.pem --server-url https://#{node['chef_automate']['chef_server_fqdn']}/organizations/acuityautomate --fqdn #{node['chef_automate']['chef_automate_fqdn']} --enterprise acuitybrands_mate --configure --no-build-node > setup.output
+        sudo automate-ctl reconfigure
         # echo "Waiting for services..."
         # until (curl --insecure -D - https://localhost/api/_status) | grep "200 OK"; do sleep 1m && automate-ctl restart; done
         # while (curl --insecure https://localhost/api/_status) | grep "fail"; do sleep 15s; done
