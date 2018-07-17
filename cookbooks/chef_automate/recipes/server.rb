@@ -40,7 +40,7 @@ bash 'configure chef automate' do
     user 'abl'
     code <<-EOH
         sudo automate-ctl setup --license /home/abl/delivery.license --key /home/abl/autos-validation.pem --server-url https://#{node['chef_automate']['chef_server_fqdn']}/organizations/acuityautomate --fqdn #{node['chef_automate']['chef_automate_fqdn']} --enterprise acuitybrands_mate --configure --no-build-node
-        #sudo automate-ctl reconfigure
+
         # echo "Waiting for services..."
         # until (curl --insecure -D - https://localhost/api/_status) | grep "200 OK"; do sleep 1m && automate-ctl restart; done
         # while (curl --insecure https://localhost/api/_status) | grep "fail"; do sleep 15s; done
