@@ -49,7 +49,7 @@ end
 bash 'create automate init-config' do
     cwd '/usr/bin'
     code <<-EOH
-        sudo ./chef-automate init-config
+        sudo chef-automate init-config
         EOH
     not_if ''
 end
