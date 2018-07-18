@@ -7,8 +7,9 @@ bash 'unzipinstall_file' do
     cwd '/tmp'
     user 'root'
     code <<-EOH
-        gunzip /tmp/chef-automate_linux_amd64.zip > chef-automate && chmod +x chef-automate
-        mv /tmp/chef-automate /usr/bin/chef-automate
+        gunzip /tmp/chef-automate_linux_amd64.zip > chef-automate 
+        mv /tmp/chef-automate /usr/bin/chef-automate 
+        sudo chmod +x /usr/bin/chef-automate
         EOH
     not_if 'ls /usr/bin/chef-automate'
 end
