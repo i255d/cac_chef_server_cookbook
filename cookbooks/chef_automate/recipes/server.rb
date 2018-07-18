@@ -48,6 +48,7 @@ bash 'create automate user' do
     cwd '/tmp'
     code <<-EOH
         sudo automate-ctl create-user acuitybrands_mate dxi02 --password @password123 --roles reviewer,committer,admin,shipper,observer
+        
         EOH
     not_if 'automate-ctl list-users acuitybrands_mate | grep dxi02'
 end
