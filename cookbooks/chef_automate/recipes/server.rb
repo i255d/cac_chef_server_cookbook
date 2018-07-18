@@ -46,11 +46,15 @@ bash 'configure kernel' do
     not_if 'cat /sys/kernel/mm/transparent_hugepage/defrag | grep never'
 end
 
-bash 'create automate init-config' do
-    cwd '/usr/bin'
-    code <<-EOH
-        sudo ./chef-automate init-config
-        EOH
+# bash 'create automate init-config' do
+#     cwd '/usr/bin'
+#     code <<-EOH
+#         sudo ./chef-automate init-config
+#         EOH
+# end
+
+execute 'chef-automate init-config' do
+    not_if 'chef-automate status'
 end
     
 bash 'create automate deploy' do
