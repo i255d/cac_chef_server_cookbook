@@ -58,7 +58,6 @@ bash 'create automate deploy' do
     code <<-EOH
         sudo ./chef-automate deploy config.toml
         EOH
-    not_if ''
 end
 
 bash 'configure data_collector' do
@@ -67,6 +66,5 @@ bash 'configure data_collector' do
         export TOK=`chef-automate admin-token`
         echo $TOK > /usr/bin/automate.tok
         EOH
-    not_if ''
 end
 
