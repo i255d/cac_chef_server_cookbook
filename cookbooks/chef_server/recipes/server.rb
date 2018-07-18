@@ -42,7 +42,7 @@ end
 bash 'create org acuityautomate' do
     cwd '/tmp'
     code <<-EOH
-        chef-server-ctl org-create acuityautomate 'AcuityBrands Automate' --filename /home/certs/acuityautomate-validator.pem 
+        chef-server-ctl org-create acuityautomate 'AcuityBrands Automate' --filename /home/certs/acuityautomate-validator.pem -a dxi02
         EOH
     not_if 'chef-server-ctl org-list|grep -w acuityautomate' 
 end
@@ -64,12 +64,13 @@ bash 'install chef manage' do
     not_if { ::File.exist?('/var/log/chef-manage/web/config') }
 end    
 
-bash 'import data collector' do
-    cwd '/user/bin'
-    code <<-EOH
-        $automateTok = cat /usr/bin/automate.tok
-        sudo chef-server-ctl set-secret data_collector token $automateTok
-        EOH
+# bash 'import data collector' do
+#     cwd '/user/bin'
+#     code <<-EOH
+#         $automateTok = cat /usr/bin/automate.tok
+#         sudo chef-server-ctl set-secret data_collector token $automateTok
+#         EOH
+# end
+execute '$automateTok = cat /usr/bin/automate.tok && sudo chef-server-ctl set-secret data_collector token $automateTok' do
+    not_if 'sudo chef-server-ctl show-secret data_collector token'
 end
-
-
