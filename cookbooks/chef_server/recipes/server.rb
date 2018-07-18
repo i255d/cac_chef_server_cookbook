@@ -31,9 +31,13 @@ end
 #     not_if 'chef-server-ctl user-list|grep -w dxi02' 
 # end
 
-execute 'chef-server-ctl user-create dxi02 Dan Iverson dxi02@acuitysso.com '@password123' --filename /home/certs/dans-validator.pem'
+execute 'chef-server-ctl user-create dxi02 Dan Iverson dxi02@acuitysso.com @password123 --filename /home/certs/dans-validator.pem' do
     not_if 'chef-server-ctl user-list|grep -w dxi02' 
 end
+
+# execute 'chef-automate init-config' do
+#     not_if 'chef-automate status'
+# end
 
 bash 'create org acuityautomate' do
     cwd '/tmp'
