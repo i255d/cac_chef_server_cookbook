@@ -31,14 +31,6 @@ bash 'create user dxi02' do
     not_if 'chef-server-ctl user-list|grep -w dxi02' 
 end
 
-bash 'create user delivery' do
-    cwd '/tmp'
-    code <<-EOH
-        chef-server-ctl user-create delivery Auto MrMate dan.iverson@acuitybrands.com '@password123' --filename /home/certs/autos-validation.pem
-        EOH
-    not_if 'chef-server-ctl user-list|grep -w delivery' 
-end
-
 bash 'create org acuityautomate' do
     cwd '/tmp'
     code <<-EOH
@@ -64,6 +56,12 @@ bash 'install chef manage' do
     not_if { ::File.exist?('/var/log/chef-manage/web/config') }
 end    
 
-
+bash 'import data collector' do
+    cwd '/user/bin'
+    code <<-EOH
+        $automateTok = cat /usr/bin/automate.tok
+        sudo chef-server-ctl set-secret data_collector token $automateTok
+        EOH
+end
 
 

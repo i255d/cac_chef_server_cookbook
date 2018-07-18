@@ -1,27 +1,37 @@
 
-remote_file '/tmp/automate-1.8.85-1.el7.x86_64.rpm' do
-    source 'https://packages.chef.io/files/stable/automate/1.8.85/el/7/automate-1.8.85-1.el7.x86_64.rpm'
+remote_file '/tmp/chef-automate_linux_amd64.zip' do
+    source 'https://packages.chef.io/files/current/latest/chef-automate-cli/chef-automate_linux_amd64.zip'
 end
 
-package 'install chef automate' do
-    source '/tmp/automate-1.8.85-1.el7.x86_64.rpm'
-    action :install
-end
-
-cookbook_file '/home/abl/delivery.license' do
-    source 'delivery.license'
-end
-
-bash 'configure sysctl' do
+bash 'unzipinstall_file' do
     cwd '/tmp'
     user 'root'
     code <<-EOH
-        sysctl vm.swappiness=10
-        sysctl -w vm.max_map_count=256000
-        sysctl -w vm.dirty_expire_centisecs=30000
-        sysctl -w net.ipv4.ip_local_port_range='35000 65000'
+        gunzip /tmp/chef-automate_linux_amd64.zip > chef-automate && chmod +x chef-automate
+        mv /tmp/chef-automate /usr/bin/chef-automate
         EOH
-    not_if 'sysctl vm.swappiness | grep 10' 
+    not_if 'ls /usr/bin/chef-automate'
+end
+
+
+bash 'configure sysctl-max_map' do
+    cwd '/tmp'
+    user 'root'
+    code <<-EOH
+        'vm.max_map_count=262144' >> /etc/sysctl.conf
+        sysctl -p
+        EOH
+    not_if 'grep vm.max_map_count=262144 /etc/sysctl.conf' 
+end
+
+bash 'configure sysctl-dirty_expire' do
+    cwd '/tmp'
+    user 'root'
+    code <<-EOH
+        'vm.dirty_expire_centisecs=20000' >> /etc/sysctl.conf
+        sysctl -p
+        EOH
+    not_if 'grep vm.dirty_expire_centisecs=20000 /etc/sysctl.conf' 
 end
 
 bash 'configure kernel' do
@@ -35,31 +45,28 @@ bash 'configure kernel' do
     not_if 'cat /sys/kernel/mm/transparent_hugepage/defrag | grep never'
 end
 
-bash 'configure chef automate' do
-    cwd '/tmp'
-    user 'abl'
-    code <<-EOH
-        sudo automate-ctl setup --license /home/abl/delivery.license --server-url https://#{node['chef_automate']['chef_server_fqdn']}/organizations/acuityautomate --fqdn #{node['chef_automate']['chef_automate_fqdn']} --enterprise acuitybrands_mate --configure --no-build-node
-        EOH
-    not_if 'automate-ctl list-enterprises | grep acuitybrands_mate'
-end
-
-bash 'create automate user' do
+bash 'create automate init-config' do
     cwd '/tmp'
     code <<-EOH
-        sudo automate-ctl create-user acuitybrands_mate dxi02 --password @password123 --roles reviewer,committer,admin,shipper,observer
-        
+        sudo ./chef-automate init-config
         EOH
-    not_if 'automate-ctl list-users acuitybrands_mate | grep dxi02'
+    not_if ''
 end
     
+bash 'create automate deploy' do
+    cwd '/tmp'
+    code <<-EOH
+        sudo ./chef-automate deploy config.toml
+        EOH
+    not_if ''
+end
 
 bash 'configure data_collector' do
     cwd '/tmp'
     code <<-EOH
-        echo "data_collector['token'] = 'chefsecuretoken'" >> /etc/delivery/delivery.rb
-        automate-ctl reconfigure
+        export TOK=`chef-automate admin-token`
+        echo $TOK > /usr/bin/automate.tok
         EOH
-    not_if 'cat /etc/delivery/delivery.rb | grep chefsecuretoken'
+    not_if ''
 end
 
