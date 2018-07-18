@@ -23,18 +23,22 @@ bash 'chef reconfigure' do
     action :nothing
 end
 
-bash 'create user dxi02' do
-    cwd '/tmp'
-    code <<-EOH
-        chef-server-ctl user-create dxi02 Dan Iverson dxi02@acuitysso.com '@password123' --filename /home/certs/dans-validator.pem
-        EOH
+# bash 'create user dxi02' do
+#     cwd '/tmp'
+#     code <<-EOH
+#         chef-server-ctl user-create dxi02 Dan Iverson dxi02@acuitysso.com '@password123' --filename /home/certs/dans-validator.pem
+#         EOH
+#     not_if 'chef-server-ctl user-list|grep -w dxi02' 
+# end
+
+execute 'chef-server-ctl user-create dxi02 Dan Iverson dxi02@acuitysso.com '@password123' --filename /home/certs/dans-validator.pem'
     not_if 'chef-server-ctl user-list|grep -w dxi02' 
 end
 
 bash 'create org acuityautomate' do
     cwd '/tmp'
     code <<-EOH
-        chef-server-ctl org-create acuityautomate 'AcuityBrands Automate' --filename /home/certs/acuityautomate-validator.pem -a delivery
+        chef-server-ctl org-create acuityautomate 'AcuityBrands Automate' --filename /home/certs/acuityautomate-validator.pem 
         EOH
     not_if 'chef-server-ctl org-list|grep -w acuityautomate' 
 end
