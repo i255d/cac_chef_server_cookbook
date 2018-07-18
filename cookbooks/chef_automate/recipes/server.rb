@@ -47,7 +47,7 @@ bash 'configure kernel' do
 end
 
 bash 'create automate init-config' do
-    cwd '/tmp'
+    cwd '/usr/bin'
     code <<-EOH
         sudo ./chef-automate init-config
         EOH
@@ -55,7 +55,7 @@ bash 'create automate init-config' do
 end
     
 bash 'create automate deploy' do
-    cwd '/tmp'
+    cwd '/usr/bin'
     code <<-EOH
         sudo ./chef-automate deploy config.toml
         EOH
@@ -63,7 +63,7 @@ bash 'create automate deploy' do
 end
 
 bash 'configure data_collector' do
-    cwd '/tmp'
+    cwd '/usr/bin'
     code <<-EOH
         export TOK=`chef-automate admin-token`
         echo $TOK > /usr/bin/automate.tok
